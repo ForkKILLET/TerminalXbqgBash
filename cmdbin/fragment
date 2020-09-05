@@ -1,0 +1,48 @@
+#!/bin/bash
+case $1 in
+  -g|--get)
+    s=${3##*#< $2}
+    s=${s%%#> $2*}
+    if [[ $4 = "-p" ]]; then
+        div -s
+        echo "Fragment <$2>:"
+        div -s
+        echo "$s"
+        div -s
+    fi
+    FRAG_VALUE=$s
+    ;;
+  -s|--set)
+    l=${3%%#< $2*}
+    r=${3##*#> $2}
+    s="$l#< $2
+$4
+#> $2$r"
+    if [[ $5 = "-p" ]]; then
+        div -s
+        echo "New str:"
+        div -s
+        echo "$s"
+        div -s
+    fi  
+    FRAG_NEWSTR="$s"
+    ;;
+  *)
+    div
+    echo "fragment
+
+USAGE
+
+· fragment -g name str [-p]
+  Get the fragment <\`name\`> in \`str\` & storage it in \$FRAG_VALUE.
+  · -p: print the fragment with style.
+
+· fragment -s name str new [-p]
+  Set the fragment <\`name\`> in \`str\` to \`new\` & storage the new str in \$FRAG_NEWSTR.
+  · -p: print the new string with style.
+
+"
+    div
+    ;;
+esac
+
